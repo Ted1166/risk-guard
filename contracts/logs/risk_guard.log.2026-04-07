@@ -1,0 +1,9 @@
+[2m2026-04-07T21:30:53.919619Z[0m [31mERROR[0m [2mcontracts::brain[0m[2m:[0m [BTCUSD] Claude API error: Failed to parse Claude response — falling back to rules
+[2m2026-04-07T21:30:54.634395Z[0m [31mERROR[0m [2mcontracts::brain[0m[2m:[0m [ETHUSD] Claude API error: Failed to parse Claude response — falling back to rules
+[2m2026-04-07T21:30:57.186726Z[0m [31mERROR[0m [2mcontracts::brain[0m[2m:[0m [SOLUSD] Claude API error: Failed to parse Claude response — falling back to rules
+[2m2026-04-07T21:31:29.997447Z[0m [31mERROR[0m [2mcontracts::brain[0m[2m:[0m [BTCUSD] Claude API error: Failed to parse Claude response — falling back to rules
+[2m2026-04-07T21:31:32.511642Z[0m [31mERROR[0m [2mcontracts::brain[0m[2m:[0m [ETHUSD] Claude API error: Failed to parse Claude response — falling back to rules
+[2m2026-04-07T21:31:35.939140Z[0m [31mERROR[0m [2mcontracts::brain[0m[2m:[0m [SOLUSD] Claude API error: Failed to parse Claude response — falling back to rules
+[2m2026-04-07T21:32:08.166157Z[0m [31mERROR[0m [2mcontracts::brain[0m[2m:[0m [BTCUSD] Claude API error: Failed to parse Claude response — falling back to rules
+[2m2026-04-07T21:32:11.260825Z[0m [31mERROR[0m [2mcontracts::brain[0m[2m:[0m [ETHUSD] Claude API error: Failed to parse Claude response — falling back to rules
+[2m2026-04-07T21:32:13.814035Z[0m [31mERROR[0m [2mcontracts::brain[0m[2m:[0m [SOLUSD] Claude API error: Failed to parse Claude response — falling back to rules

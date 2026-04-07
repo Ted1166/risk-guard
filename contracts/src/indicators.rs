@@ -79,6 +79,7 @@ pub fn rsi(candles: &[Candle], period: usize) -> Option<f64> {
 
 
 #[derive(Debug, Default)]
+#[allow(dead_code)]
 pub struct DrawdownTracker {
     pub peak: f64,
     pub current: f64,
@@ -109,6 +110,7 @@ impl DrawdownTracker {
         dd
     }
 
+    #[allow(dead_code)]
     pub fn current_drawdown(&self) -> f64 {
         if self.peak > 0.0 {
             (self.peak - self.current) / self.peak
@@ -117,6 +119,7 @@ impl DrawdownTracker {
         }
     }
 
+    #[allow(dead_code)]
     pub fn reset(&mut self) {
         *self = Self::default();
     }
@@ -239,10 +242,9 @@ mod tests {
     #[test]
     fn test_volatility_regime() {
         let history = vec![100.0, 105.0, 98.0, 102.0, 100.0];
-        let (regime, multiple) = volatility_regime(100.0, &history, 5);
+        let (regime, _multiple) = volatility_regime(100.0, &history, 5);
         assert_eq!(regime, VolatilityRegime::Normal);
 
-        // 3x average → extreme
         let (regime2, _) = volatility_regime(300.0, &history, 5);
         assert_eq!(regime2, VolatilityRegime::Extreme);
     }

@@ -4,9 +4,10 @@ use tracing::warn;
 
 use crate::config::RiskParams;
 use crate::indicators::{
-    atr, atr_series, rsi, volatility_regime, momentum, DrawdownTracker, VolatilityRegime,
+    atr, atr_series, rsi, volatility_regime, DrawdownTracker, VolatilityRegime,
 };
 use crate::market::{Candle, Ticker};
+
 
 #[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord)]
 pub enum RiskLevel {
@@ -29,6 +30,7 @@ impl std::fmt::Display for RiskLevel {
 
 
 #[derive(Debug, Clone)]
+#[allow(dead_code)]
 pub struct GuardResult {
     pub name: String,
     pub passed: bool,
@@ -40,6 +42,7 @@ pub struct GuardResult {
 
 
 #[derive(Debug, Clone)]
+#[allow(dead_code)]
 pub struct RiskVerdict {
     pub pair: String,
     pub level: RiskLevel,
@@ -56,6 +59,7 @@ impl RiskVerdict {
         matches!(self.level, RiskLevel::Clear | RiskLevel::Caution)
     }
 }
+
 
 struct PairState {
     atr_history: Vec<f64>,
@@ -157,6 +161,7 @@ impl RiskEngine {
                 value: Some(current_dd),
                 threshold: Some(p.max_drawdown_pct),
             });
+            // Re-borrow state to trigger cooldown
             let state = self.pair_states.get_mut(pair).unwrap();
             state.trigger_cooldown(
                 &format!("drawdown halt {:.1}%", current_dd * 100.0),
@@ -187,6 +192,7 @@ impl RiskEngine {
         let state = self.pair_states.get_mut(pair).unwrap();
 
         if let Some(current_atr) = atr(candles, p.atr_period) {
+            // Update ATR history from the full series
             let series = atr_series(candles, p.atr_period);
             if !series.is_empty() {
                 state.atr_history = series;
@@ -309,6 +315,7 @@ fn build_verdict(
         .cloned()
         .unwrap_or(RiskLevel::Clear);
 
+    // Allowed position size
     let allowed = match worst_level {
         RiskLevel::Halt | RiskLevel::Cooldown => 0.0,
         RiskLevel::Caution => {
@@ -321,6 +328,7 @@ fn build_verdict(
         RiskLevel::Clear => max_position_pct,
     };
 
+    // Summary sentence
     let halted: Vec<_> = guards.iter().filter(|g| !g.passed).collect();
     let cautioned: Vec<_> = guards
         .iter()

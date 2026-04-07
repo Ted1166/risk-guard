@@ -7,9 +7,9 @@ use crate::config::AppConfig;
 use crate::market::{self, Ticker};
 use crate::risk::RiskEngine;
 
-// ── Position ──────────────────────────────────────────────────────────────────
 
 #[derive(Debug, Clone)]
+#[allow(dead_code)]
 pub struct Position {
     pub pair: String,
     pub side: String,
@@ -33,6 +33,7 @@ impl Position {
 
 
 #[derive(Debug, Clone)]
+#[allow(dead_code)]
 pub struct ExecLog {
     pub timestamp: DateTime<Local>,
     pub pair: String,

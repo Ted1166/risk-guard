@@ -1,4 +1,5 @@
 #[derive(Debug, Clone)]
+#[allow(dead_code)]
 pub struct RiskParams {
     pub max_position_pct: f64,
     pub max_total_exposure_pct: f64,
@@ -39,6 +40,7 @@ impl Default for RiskParams {
 }
 
 #[derive(Debug, Clone)]
+#[allow(dead_code)]
 pub struct AppConfig {
     pub watch_pairs: Vec<String>,
     pub paper_initial_balance: f64,

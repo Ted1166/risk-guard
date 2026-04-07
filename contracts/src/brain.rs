@@ -5,7 +5,7 @@ use tracing::{error, info};
 use crate::config::AppConfig;
 use crate::indicators::{momentum, rsi};
 use crate::market::{Candle, Ticker};
-use crate::risk::{RiskLevel, RiskVerdict};
+use crate::risk::RiskVerdict;
 
 
 #[derive(Debug, Clone)]

@@ -3,7 +3,7 @@ use serde::Deserialize;
 use serde_json::Value;
 use std::collections::HashMap;
 use std::process::Command;
-use tracing::{debug};
+use tracing::debug;
 
 
 fn run_kraken(cli: &str, args: &[&str]) -> anyhow::Result<Value> {
@@ -44,6 +44,7 @@ fn run_kraken(cli: &str, args: &[&str]) -> anyhow::Result<Value> {
 
 
 #[derive(Debug, Clone)]
+#[allow(dead_code)]
 pub struct Ticker {
     pub pair: String,
     pub ask: f64,
@@ -64,6 +65,7 @@ impl Ticker {
 }
 
 #[derive(Debug, Clone)]
+#[allow(dead_code)]
 pub struct Candle {
     pub time: i64,
     pub open: f64,
@@ -74,6 +76,7 @@ pub struct Candle {
 }
 
 #[derive(Debug, Clone)]
+#[allow(dead_code)]
 pub struct PaperStatus {
     pub portfolio_value: f64,
     pub unrealized_pnl: f64,
@@ -81,6 +84,7 @@ pub struct PaperStatus {
 }
 
 #[derive(Debug, Clone)]
+#[allow(dead_code)]
 pub struct PaperFill {
     pub pair: String,
     pub side: String,
@@ -89,6 +93,7 @@ pub struct PaperFill {
 }
 
 #[derive(Debug, Clone, Deserialize)]
+#[allow(dead_code)]
 pub struct SystemStatus {
     pub status: String,
     pub timestamp: Option<String>,
@@ -220,6 +225,7 @@ pub fn paper_status(cli: &str) -> anyhow::Result<PaperStatus> {
     Ok(PaperStatus { portfolio_value, unrealized_pnl, trade_count })
 }
 
+#[allow(dead_code)]
 pub fn paper_balance(cli: &str) -> anyhow::Result<HashMap<String, f64>> {
     let val = run_kraken(cli, &["paper", "balance"])?;
     let mut result = HashMap::new();
@@ -267,7 +273,31 @@ pub fn paper_sell(
     Ok(PaperFill { pair: pair.to_string(), side: "sell".to_string(), volume, price })
 }
 
+#[allow(dead_code)]
 pub fn paper_reset(cli: &str) -> anyhow::Result<()> {
     run_kraken(cli, &["paper", "reset"])?;
     Ok(())
+}
+
+#[allow(dead_code)]
+pub fn paper_history(cli: &str) -> anyhow::Result<Vec<serde_json::Value>> {
+    let val = run_kraken(cli, &["paper", "history"])?;
+    Ok(match val {
+        serde_json::Value::Array(arr) => arr,
+        serde_json::Value::Object(ref obj) => obj
+            .get("trades")
+            .and_then(|v| v.as_array())
+            .cloned()
+            .unwrap_or_default(),
+        _ => vec![],
+    })
+}
+
+pub fn arm_dead_mans_switch(cli: &str, seconds: u64) -> anyhow::Result<()> {
+    let secs = seconds.to_string();
+    match run_kraken(cli, &["order", "cancel-after", &secs]) {
+        Ok(_) => Ok(()),
+        Err(e) if e.to_string().contains("auth") || e.to_string().contains("Invalid key") => Ok(()),
+        Err(e) => Err(e),
+    }
 }
