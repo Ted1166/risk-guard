@@ -96,7 +96,7 @@ async fn main() -> Result<()> {
     let mut tickers:       HashMap<String, market::Ticker>    = HashMap::new();
     let mut verdicts:      HashMap<String, risk::RiskVerdict> = HashMap::new();
     let mut price_history: HashMap<String, Vec<f64>>          = HashMap::new();
-    let mut current_drawdown: f64 = 0.0;
+    let mut _current_drawdown: f64 = 0.0;
     let mut cycle: u64 = 0;
 
     for pair in &pairs {
@@ -233,7 +233,7 @@ async fn main() -> Result<()> {
 
         // 4. Refresh portfolio again after executions
         let portfolio_value = executor.refresh_portfolio(&cfg);
-        current_drawdown = risk_engine.dd_tracker.current_drawdown();
+        _current_drawdown = risk_engine.dd_tracker.current_drawdown();
 
         // 5. Social log — one-liner every cycle, full report every N
         let summary = social::build_summary(cycle, &executor, &verdicts);
@@ -248,7 +248,7 @@ async fn main() -> Result<()> {
 
         // 6. Render dashboard
         term.draw(|f| {
-            dashboard::render(f, &executor, &pairs, &tickers, &verdicts, &price_history, cycle, current_drawdown);
+            dashboard::render(f, &executor, &pairs, &tickers, &verdicts, &price_history, cycle, _current_drawdown);
         })?;
 
         info!(

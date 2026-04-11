@@ -66,11 +66,16 @@ impl Executor {
     }
 
     pub fn initialize(&mut self, cfg: &AppConfig) -> anyhow::Result<()> {
-        market::paper_init(&cfg.kraken_cli, cfg.paper_initial_balance, &cfg.paper_currency)?;
+        match market::paper_init(&cfg.kraken_cli, cfg.paper_initial_balance, &cfg.paper_currency) {
+            Ok(_) => info!("Paper account initialized: ${:.2}", cfg.paper_initial_balance),
+            Err(e) if e.to_string().contains("already initialized") => {
+                info!("Paper account already exists — continuing with existing account");
+            }
+            Err(e) => return Err(e),
+        }
         self.initial_balance = cfg.paper_initial_balance;
         self.portfolio_value = cfg.paper_initial_balance;
         self.initialized = true;
-        info!("Paper account initialized: ${:.2}", cfg.paper_initial_balance);
         Ok(())
     }
 

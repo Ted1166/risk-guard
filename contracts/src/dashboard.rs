@@ -152,7 +152,7 @@ fn render_guards(f: &mut Frame, area: Rect, verdicts: &HashMap<String, RiskVerdi
                 .map(|v| format!("{v:.2}"))
                 .unwrap_or_else(|| "—".to_string());
 
-            let thr_str = g.threshold
+            let _thr_str = g.threshold
                 .map(|t| format!("{t:.2}"))
                 .unwrap_or_else(|| "—".to_string());
 

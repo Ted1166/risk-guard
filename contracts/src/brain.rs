@@ -171,8 +171,12 @@ async fn call_claude(client: &reqwest::Client, cfg: &AppConfig, prompt: String) 
         }],
     };
 
+    let api_key = std::env::var("ANTHROPIC_API_KEY")
+        .unwrap_or_default();
+
     let resp = client
         .post("https://api.anthropic.com/v1/messages")
+        .header("x-api-key", api_key)
         .header("anthropic-version", "2023-06-01")
         .json(&req)
         .send()
@@ -267,7 +271,7 @@ fn rule_based_decision(pair: &str, candles: &[Candle], verdict: &RiskVerdict) ->
     let mom_val = momentum(candles, 10);
 
     match (rsi_val, mom_val) {
-        (Some(r), Some(m)) if r < 50.0 && m > 1.0 => TradeDecision {
+        (Some(r), Some(m)) if r < 55.0 && m > 0.3 => TradeDecision {
             action: Action::Buy,
             pair: pair.to_string(),
             size_pct: 0.5,
